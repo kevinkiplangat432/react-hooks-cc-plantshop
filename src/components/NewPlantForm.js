@@ -8,7 +8,11 @@ function NewPlantForm({ addPlant }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !image || !price) return;
-    addPlant({ name, image, price: parseFloat(price) });
+
+    // Convert price to number
+    addPlant({ name, image, price: price.toString(price) });
+
+    // Reset form
     setName("");
     setImage("");
     setPrice("");

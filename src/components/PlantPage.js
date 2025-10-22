@@ -9,6 +9,7 @@ function PlantPage() {
   const [plants, setPlants] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Fetch all plants
   useEffect(() => {
     fetch(API)
       .then((res) => res.json())
@@ -16,24 +17,32 @@ function PlantPage() {
       .catch((err) => console.error(err));
   }, []);
 
+  // Add new plant
   const addPlant = (newPlant) => {
-    fetch(API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newPlant),
-    })
-      .then((res) => res.json())
-      .then((savedPlant) => setPlants([...plants, savedPlant]))
-      .catch((err) => console.error(err));
-  };
+  fetch("http://localhost:6001/plants", {
+    method: "POST",
+    headers: {
+      "Content-Type": "Application/JSON"
+    },
+    body: JSON.stringify(newPlant),
+  })
+    .then((res) => res.json())
+    .then((savedPlant) => setPlants([...plants, savedPlant]))
+    .catch((err) => console.error(err));
+};
 
+
+  // Mark plant as sold out
   const markSoldOut = (id) => {
-    setPlants(plants.map((p) => (p.id === id ? { ...p, soldOut: true } : p)));
+    setPlants(
+      plants.map((p) => (p.id === id ? { ...p, soldOut: true } : p))
+    );
   };
 
-const filteredPlants = (plants || []).filter((plant) =>
-  plant.name.toLowerCase().includes(searchTerm.toLowerCase())
-);
+  // Filter plants by search
+  const filteredPlants = (plants || []).filter((plant) =>
+    plant.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div style={{ padding: "2rem" }}>
